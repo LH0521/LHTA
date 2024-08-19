@@ -1,0 +1,414 @@
+<!--
+    This code is the intellectual property of the owner.
+    Unauthorized editing, removal, updating, adding, duplicating, selling, or reusing of this code is strictly prohibited.
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Search, Explore, Open" property="og:title" />
+    <meta content="A website for guys to find content that gets you going!" property="og:description" />
+    <meta content="https://mikewasheregh.github.io/C/" property="og:url" />
+    <meta content="logo.png" property="og:image" />
+    <meta content="#5C60F5" data-react-helmet="true" name="theme-color" />
+
+    <!-- Tab -->
+    <link rel="icon" type="image/x-icon" href="logo.png">
+    <title>Link Hub</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/@webpixels/css@1.2.6/dist/index.css">
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+    <div class="offcanvas offcanvas-end w-full w-lg-1/3" tabindex="-1" id="link_canvas"
+        aria-labelledby="link_canvas_label">
+        <div class="offcanvas-header border-bottom py-5 bg-surface-secondary">
+            <h5 id="link_canvas_label"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+        </div>
+        <div class="offcanvas-footer my-4 ms-4 gap-4 bg-surface-secondary">
+            <button type="button" class="btn btn-sm btn-neutral" data-bs-dismiss="offcanvas">Close</button>
+            <button type="button" class="btn btn-sm btn-danger">Report</button>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-end w-full w-lg-1/3" tabindex="-1" id="saves_canvas" aria-labelledby="saves_canvas"
+        aria-modal="true" role="dialog">
+        <div class="offcanvas-header border-bottom py-5 bg-surface-secondary">
+            <h5>Saves</h5>
+            <button type="button" class="btn-close text-reset text-xs" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body" class="row g-3 g-xl-5 mt-1">
+            <div class="card shadow-4-hover">
+                <div class="card-body pb-5">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <img alt="Profile Picture" class="avatar rounded-1"
+                                src="https://pbs.twimg.com/profile_images/1562600762361921536/kMsRrEmD_400x400.jpg">
+                        </div>
+                        <div class="flex-1">
+                            <a href="#" class="d-block font-semibold text-sm text-heading text-primary-hover">Link
+                                Name</a>
+                            <div class="text-xs text-muted line-clamp-1">@link.link</div>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-sm btn-neutral rounded-pill view-button"
+                                data-index="${originalIndex}">
+                                <i class="bi bi-folder2-open me-1"></i>
+                                <span>View</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow-4-hover">
+                <div class="card-body pb-5">
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <img alt="Profile Picture" class="avatar rounded-1"
+                                src="https://pbs.twimg.com/profile_images/1562600762361921536/kMsRrEmD_400x400.jpg">
+                        </div>
+                        <div class="flex-1">
+                            <a href="#" class="d-block font-semibold text-sm text-heading text-primary-hover">Link
+                                Name</a>
+                            <div class="text-xs text-muted line-clamp-1">@link.link</div>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-sm btn-neutral rounded-pill view-button"
+                                data-index="${originalIndex}">
+                                <i class="bi bi-folder2-open me-1"></i>
+                                <span>View</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--
+    <div class="container-fluid py-8 px bg-surface-secondary" id="welcome">
+        <div class="card max-w-screen-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-center">
+                    <a href="#" class="avatar avatar-xl">
+                        <img alt="..." src="logo.png">
+                    </a>
+                </div>
+                <div class="text-center my-6">
+                    <a href="#" class="d-block h5 mb-0">Link Hub</a>
+                    <span class="d-block text-sm text-muted">Welcome to Link Hub! This platform is designed exclusively
+                        for individuals aged 18 and older. If you do not meet this age requirement, we kindly ask that
+                        you exit. However, if you are 18 or older, please click the button below to continue.</span>
+                </div>
+                <div class="vstack gap-3 mt-4">
+                    <div class="form-item-checkable">
+                        <input class="form-item-check" type="radio" name="filter-version" id="filter-version-c">
+                        <label class="item w-full" for="filter-version-c" id="continue-button">
+                            <span
+                                class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
+                                <i class="bi bi-lightning-charge text-lg me-3"></i>
+                                <span class="text-body text-sm font-semibold">Continue</span>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="form-item-checkable">
+                        <input class="form-item-check" type="radio" name="filter-version" id="filter-version-e">
+                        <label class="item w-full" for="filter-version-e">
+                            <span
+                                class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
+                                <i class="bi bi-lightning-charge text-lg me-3"></i>
+                                <span class="text-body text-sm font-semibold">Exit</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+    <main class="py-6 bg-surface-secondary" id="application">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-2 vstack gap-3">
+                    <button class="btn btn-sm btn-neutral w-full mb-3 d-md-none" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse-page-filters" aria-expanded="false"
+                        aria-controls="collapse-page-filters">
+                        <i class="bi bi-filter-square me-2"></i>Navigation
+                    </button>
+                    <div class="collapse d-md-block mb-6" id="collapse-page-filters">
+                        <div class="vstack gap-5">
+                            <div class="card gap-5 position-relative">
+                                <div class="dropdown w-full">
+                                    <button
+                                        class="btn-primary d-flex w-full py-3 ps-3 pe-4 align-items-center rounded-3"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="me-3">
+                                            <img alt="..."
+                                                src="https://em-content.zobj.net/source/microsoft-teams/363/person_1f9d1.png"
+                                                class="avatar avatar-sm rounded-circle">
+                                        </span>
+                                        <span class="flex-fill text-start text-sm font-semibold">Annonymous</span>
+                                        <span>
+                                            <i class="bi bi-chevron-expand text-white text-opacity-70"></i>
+                                        </span>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end w-full">
+                                        <div class="dropdown-header">
+                                            <span class="d-block text-sm text-muted mb-1">Signed in as</span>
+                                            <span class="d-block text-heading font-semibold">Annonymous</span>
+                                        </div>
+                                        <div class="dropdown-divider"></div>
+                                        <span class="d-block text-sm text-muted">Preview Version of Link Hub. User/Auth
+                                            features are currently unavaliable!</span>
+                                        <div class="dropdown-divider"></div>
+                                        <button class="dropdown-item" data-bs-toggle="offcanvas"
+                                            data-bs-target="#saves_canvas">
+                                            <i class="bi bi-heart me-3"></i>Saves
+                                        </button>
+                                        <div class="dropdown-divider"></div>
+                                        <button class="dropdown-item">
+                                            <i class="bi bi-box-arrow-left me-3"></i>Login
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card h-full">
+                                <div class="card-body">
+                                    <div class="card-title d-flex align-items-center">
+                                        <h5 class="mb-0">Source</h5>
+                                    </div>
+                                    <div class="vstack gap-3 mt-4">
+                                        <div class="form-item-checkable">
+                                            <label class="item w-full" for="filter-version-twitter">
+                                                <span
+                                                    class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
+                                                    <i class="bi bi-twitter-x text-lg me-3"></i>
+                                                    <span class="text-body text-sm font-semibold">Twitter</span>
+                                                    <div class="ms-auto text-end">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="filter-version" id="filter-version-twitter"
+                                                            value="twitter">
+                                                    </div>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="form-item-checkable">
+                                            <label class="item w-full" for="filter-version-reddit">
+                                                <span
+                                                    class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
+                                                    <i class="bi bi-reddit text-lg me-3"></i>
+                                                    <span class="text-body text-sm font-semibold">Reddit</span>
+                                                    <div class="ms-auto text-end">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="filter-version" id="filter-version-reddit"
+                                                            value="reddit">
+                                                    </div>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card h-full">
+                                <div class="card-body">
+                                    <div class="card-title d-flex align-items-center">
+                                        <h5 class="mb-0">Body</h5>
+                                    </div>
+                                    <div class="vstack gap-3 mt-4">
+                                        <div class="form-item-checkable">
+                                            <label class="item w-full" for="filter-twink">
+                                                <span
+                                                    class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
+                                                    <i class="bi bi-1-square text-lg me-3"></i>
+                                                    <span class="text-body text-sm font-semibold">Twink</span>
+                                                    <div class="ms-auto text-end">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="filter-body" id="filter-twink" value="Twink">
+                                                    </div>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="form-item-checkable">
+                                            <label class="item w-full" for="filter-twunk">
+                                                <span
+                                                    class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
+                                                    <i class="bi bi-2-square text-lg me-3"></i>
+                                                    <span class="text-body text-sm font-semibold">Twunk</span>
+                                                    <div class="ms-auto text-end">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="filter-body" id="filter-twunk" value="Twunk">
+                                                    </div>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="form-item-checkable">
+                                            <label class="item w-full" for="filter-jock">
+                                                <span
+                                                    class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
+                                                    <i class="bi bi-3-square text-lg me-3"></i>
+                                                    <span class="text-body text-sm font-semibold">Jock</span>
+                                                    <div class="ms-auto text-end">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="filter-body" id="filter-jock" value="Jock">
+                                                    </div>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card h-full">
+                                <div class="card-body">
+                                    <div class="card-title d-flex align-items-center">
+                                        <h5 class="mb-0">Race</h5>
+                                    </div>
+                                    <div class="vstack gap-3 mt-4">
+                                        <div class="form-item-checkable">
+                                            <label class="item w-full" for="filter-white">
+                                                <span
+                                                    class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
+                                                    <i class="bi bi-1-circle text-lg me-3"></i>
+                                                    <span class="text-body text-sm font-semibold">White</span>
+                                                    <div class="ms-auto text-end">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="filter-race" id="filter-white" value="White">
+                                                    </div>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="form-item-checkable">
+                                            <label class="item w-full" for="filter-latino">
+                                                <span
+                                                    class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
+                                                    <i class="bi bi-2-circle text-lg me-3"></i>
+                                                    <span class="text-body text-sm font-semibold">Latino</span>
+                                                    <div class="ms-auto text-end">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="filter-race" id="filter-latino" value="Latino">
+                                                    </div>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="form-item-checkable">
+                                            <label class="item w-full" for="filter-black">
+                                                <span
+                                                    class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
+                                                    <i class="bi bi-3-circle text-lg me-3"></i>
+                                                    <span class="text-body text-sm font-semibold">Black</span>
+                                                    <div class="ms-auto text-end">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="filter-race" id="filter-black" value="Black">
+                                                    </div>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="form-item-checkable">
+                                            <label class="item w-full" for="filter-asian">
+                                                <span
+                                                    class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
+                                                    <i class="bi bi-4-circle text-lg me-3"></i>
+                                                    <span class="text-body text-sm font-semibold">Asian</span>
+                                                    <div class="ms-auto text-end">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="filter-race" id="filter-asian" value="Asian">
+                                                    </div>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card h-full">
+                                <div class="card-body">
+                                    <div class="card-title d-flex align-items-center">
+                                        <h5 class="mb-0">Sexuality</h5>
+                                    </div>
+                                    <div class="vstack gap-3 mt-4">
+                                        <div class="form-item-checkable">
+                                            <label class="item w-full" for="sexuality-straight">
+                                                <span
+                                                    class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
+                                                    <i class="bi bi-person-raised-hand text-lg me-3"></i>
+                                                    <span class="text-body text-sm font-semibold">Straight</span>
+                                                    <div class="ms-auto text-end">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="sexuality-filter" id="sexuality-straight"
+                                                            value="Straight">
+                                                    </div>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="form-item-checkable">
+                                            <label class="item w-full" for="sexuality-gay">
+                                                <span
+                                                    class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
+                                                    <i class="bi bi-person-standing text-lg me-3"></i>
+                                                    <span class="text-body text-sm font-semibold">Gay</span>
+                                                    <div class="ms-auto text-end">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="sexuality-filter" id="sexuality-gay" value="Gay">
+                                                    </div>
+                                                </span>
+                                            </label>
+                                        </div>
+                                        <div class="form-item-checkable">
+                                            <label class="item w-full" for="sexuality-lesbian">
+                                                <span
+                                                    class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
+                                                    <i class="bi bi-person-standing-dress text-lg me-3"></i>
+                                                    <span class="text-body text-sm font-semibold">Lesbian</span>
+                                                    <div class="ms-auto text-end">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            name="sexuality-filter" id="sexuality-lesbian"
+                                                            value="Lesbian">
+                                                    </div>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-9">
+                    <div>
+                        <div class="d-flex flex-column flex-sm-row justify-content-between gap-3">
+                            <div class="input-group input-group-sm input-group-inline">
+                                <span class="input-group-text pe-2">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text" id="search" class="form-control" placeholder="Search"
+                                    aria-label="Search">
+
+                            </div>
+                        </div>
+                        <div id="results-container" class="row g-3 g-xl-5 mt-1">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="links.js"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>

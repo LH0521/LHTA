@@ -1,0 +1,77 @@
+/*
+    This code is the intellectual property of the owner.
+    Unauthorized editing, removal, updating, adding, duplicating, selling, or reusing of this code is strictly prohibited.
+*/
+
+.rating>label {
+    margin-right: 4px;
+}
+
+.rating:not(:checked)>input {
+    display: none;
+}
+
+.rating:not(:checked)>label {
+    float: right;
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.rating:not(:checked)>label>svg {
+    fill: #666;
+    transition: fill 0.3s ease;
+}
+
+.rating>input:checked~label>svg {
+    fill: #ffa723;
+}
+
+.rating:not(:checked)>label:hover~label>svg,
+.rating:not(:checked)>label:hover>svg {
+    fill: #ff9e0b;
+}
+
+#star1:hover~label>svg,
+#star1:hover>svg {
+    fill: #FF5C85 !important;
+}
+
+#star2:hover~label>svg,
+#star2:hover>svg {
+    fill: #FFA333 !important;
+}
+
+#star3:hover~label>svg,
+#star3:hover>svg {
+    fill: #FFC933 !important;
+}
+
+#star4:hover~label>svg,
+#star4:hover>svg {
+    fill: #33D6A0 !important;
+}
+
+#star5:hover~label>svg,
+#star5:hover>svg {
+    fill: #33ADFF !important;
+}
+
+#star1:checked~label>svg {
+    fill: #FF3366;
+}
+
+#star2:checked~label>svg {
+    fill: #FF8C00;
+}
+
+#star3:checked~label>svg {
+    fill: #FFBB00;
+}
+
+#star4:checked~label>svg {
+    fill: #00CC88;
+}
+
+#star5:checked~label>svg {
+    fill: #0099FF;
+}
