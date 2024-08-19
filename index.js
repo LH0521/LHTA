@@ -3,7 +3,55 @@
     Unauthorized editing, removal, updating, adding, duplicating, selling, or reusing of this code is strictly prohibited.
 */
 
+const firebaseConfig = {
+    apiKey: "AIzaSyBmY7RV-eAK7iEGJ3b3N9BoXAJ6eNLZ6Fw",
+    authDomain: "lhta-b8194.firebaseapp.com",
+    projectId: "lhta-b8194",
+    storageBucket: "lhta-b8194.appspot.com",
+    messagingSenderId: "63441875239",
+    appId: "1:63441875239:web:0648aedce3e20c6656f902"
+};
+
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
 document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('login-button').addEventListener('click', () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider).then(result => {
+            const user = result.user;
+            updateUIForLoggedInUser(user);
+        }).catch(error => {
+            console.error("Authentication error", error);
+        });
+    });
+
+    document.getElementById('logout-button').addEventListener('click', () => {
+        auth.signOut().then(() => {
+            resetUIForLoggedOutUser();
+        }).catch(error => {
+            console.error("Logout error", error);
+        });
+    });
+
+    function updateUIForLoggedInUser(user) {
+        document.getElementById('user-name').textContent = user.displayName;
+        document.getElementById('user-avatar').src = user.photoURL;
+        document.getElementById('login-button').style.display = 'none';
+        document.getElementById('logout-button').style.display = 'block';
+        document.getElementById('saves-tab').style.display = 'block';
+    }
+
+    function resetUIForLoggedOutUser() {
+        document.getElementById('user-name').textContent = 'Anonymous';
+        document.getElementById('user-avatar').src = 'default-avatar.png';
+        document.getElementById('login-button').style.display = 'block';
+        document.getElementById('logout-button').style.display = 'none';
+        document.getElementById('saves-tab').style.display = 'none';
+    }
+
     const searchInput = document.getElementById('search');
     const filterElements = {
         source: document.querySelectorAll('input[name="filter-version"]'),
@@ -91,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openCanvas(link) {
+        trackLinkOpen(link);
         const linkPrefix = link.details.source === 'reddit' ? 'u/' : '@';
         const urlPrefix = link.details.source === 'reddit' ? 'https://www.reddit.com/user/' : 'https://x.com/';
         const fullUrl = urlPrefix + link.link;
@@ -190,12 +239,36 @@ document.addEventListener('DOMContentLoaded', () => {
         linkCanvas.show();
     }
 
-    const initialLinks = links.map((link, originalIndex) => ({
-        ...link,
-        originalIndex
-    }));
+    function trackLinkOpen(link) {
+        db.collection('links').doc(link.link).update({
+            opens: firebase.firestore.FieldValue.increment(1)
+        });
+    }
 
-    displayResults(initialLinks);
+    function saveLink(link) {
+        const user = auth.currentUser;
+        if (!user) return;
+
+        db.collection('users').doc(user.uid).collection('saves').doc(link.link).set(link).then(() => {
+            updateSaveCount(link.link, 1);
+        }).catch(error => {
+            console.error("Error saving link", error);
+        });
+    }
+
+    function updateSaveCount(linkId, delta) {
+        db.collection('links').doc(linkId).update({
+            saves: firebase.firestore.FieldValue.increment(delta)
+        });
+    }
+
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            updateUIForLoggedInUser(user);
+        } else {
+            resetUIForLoggedOutUser();
+        }
+    });
 
     searchInput.addEventListener('input', filterlinks);
     filterElements.source.forEach(el => el.addEventListener('change', filterlinks));
