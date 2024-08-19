@@ -3,21 +3,21 @@
     Unauthorized editing, removal, updating, adding, duplicating, selling, or reusing of this code is strictly prohibited.
 */
 
-const firebaseConfig = {
-    apiKey: "AIzaSyBmY7RV-eAK7iEGJ3b3N9BoXAJ6eNLZ6Fw",
-    authDomain: "lhta-b8194.firebaseapp.com",
-    projectId: "lhta-b8194",
-    storageBucket: "lhta-b8194.appspot.com",
-    messagingSenderId: "63441875239",
-    appId: "1:63441875239:web:0648aedce3e20c6656f902"
-};
-
-// Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-
 document.addEventListener('DOMContentLoaded', () => {
+    const firebaseConfig = {
+        apiKey: "AIzaSyBmY7RV-eAK7iEGJ3b3N9BoXAJ6eNLZ6Fw",
+        authDomain: "lhta-b8194.firebaseapp.com",
+        projectId: "lhta-b8194",
+        storageBucket: "lhta-b8194.appspot.com",
+        messagingSenderId: "63441875239",
+        appId: "1:63441875239:web:0648aedce3e20c6656f902"
+    };
+    
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    
     document.getElementById('login-button').addEventListener('click', () => {
         const provider = new firebase.auth.GoogleAuthProvider();
         auth.signInWithPopup(provider).then(result => {
