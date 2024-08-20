@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         appId: "1:263188180300:web:b5f27fb7ab12078c2cf3e9"
     };
 
-    const app = firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
     function googleSignIn() {
