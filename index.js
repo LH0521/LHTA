@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     console.log("Firebase initialized successfully");
-    
+
     const loginButton = document.getElementById('loginButton');
     if (loginButton) {
         loginButton.addEventListener('click', googleSignIn);
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateUIOnLogin(user) {
-        const userNameElement = document.querySelector('.dropdown-header span.d-block.text-heading');
+        const userNameElement = document.getElementById('username');
         const userPicElement = document.querySelector('.avatar.avatar-sm');
         userNameElement.textContent = user.displayName;
         userPicElement.src = user.photoURL;
