@@ -4,6 +4,56 @@
 */
 
 document.addEventListener('DOMContentLoaded', () => {
+    const firebaseConfig = {
+        apiKey: "AIzaSyAAM6hjI1C6BTdOzVuehvAsgViHU_ZeKx0",
+        authDomain: "lhta-dcc46.firebaseapp.com",
+        projectId: "lhta-dcc46",
+        storageBucket: "lhta-dcc46.appspot.com",
+        messagingSenderId: "263188180300",
+        appId: "1:263188180300:web:b5f27fb7ab12078c2cf3e9"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    function googleSignIn() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider).then((result) => {
+            const user = result.user;
+            updateUIOnLogin(user);
+        }).catch((error) => {
+            console.error("Error signing in: ", error);
+        });
+    }
+
+    function signOut() {
+        auth.signOut().then(() => {
+            updateUIOnLogout();
+        }).catch((error) => {
+            console.error("Error signing out: ", error);
+        });
+    }
+
+    function updateUIOnLogin(user) {
+        const userNameElement = document.querySelector('.dropdown-header span.d-block.text-heading');
+        const userPicElement = document.querySelector('.avatar.avatar-sm');
+        userNameElement.textContent = user.displayName;
+        userPicElement.src = user.photoURL;
+        document.querySelector('.dropdown-item[data-bs-toggle="offcanvas"]').style.display = 'block';
+        document.querySelector('.dropdown-item:last-child').textContent = 'Logout';
+        document.querySelector('.dropdown-item:last-child').onclick = signOut;
+    }
+
+    function updateUIOnLogout() {
+        const userNameElement = document.querySelector('.dropdown-header span.d-block.text-heading');
+        const userPicElement = document.querySelector('.avatar.avatar-sm');
+        userNameElement.textContent = 'Annonymous';
+        userPicElement.src = 'https://em-content.zobj.net/source/microsoft-teams/363/person_1f9d1.png';
+        document.querySelector('.dropdown-item[data-bs-toggle="offcanvas"]').style.display = 'none';
+        document.querySelector('.dropdown-item:last-child').textContent = 'Login';
+        document.querySelector('.dropdown-item:last-child').onclick = googleSignIn;
+    }
+
     const searchInput = document.getElementById('search');
     const filterElements = {
         source: document.querySelectorAll('input[name="filter-version"]'),
