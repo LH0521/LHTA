@@ -16,6 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     console.log("Firebase initialized successfully");
+    
+    const loginButton = document.getElementById('loginButton');
+    if (loginButton) {
+        loginButton.addEventListener('click', googleSignIn);
+    }
 
     function googleSignIn() {
         const provider = new firebase.auth.GoogleAuthProvider();
@@ -40,9 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const userPicElement = document.querySelector('.avatar.avatar-sm');
         userNameElement.textContent = user.displayName;
         userPicElement.src = user.photoURL;
-        document.querySelector('.dropdown-item[data-bs-toggle="offcanvas"]').style.display = 'block';
-        document.querySelector('.dropdown-item:last-child').textContent = 'Logout';
-        document.querySelector('.dropdown-item:last-child').onclick = signOut;
+        loginButton.textContent = 'Logout';
+        loginButton.onclick = signOut;
     }
 
     function updateUIOnLogout() {
@@ -50,9 +54,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const userPicElement = document.querySelector('.avatar.avatar-sm');
         userNameElement.textContent = 'Annonymous';
         userPicElement.src = 'https://em-content.zobj.net/source/microsoft-teams/363/person_1f9d1.png';
-        document.querySelector('.dropdown-item[data-bs-toggle="offcanvas"]').style.display = 'none';
-        document.querySelector('.dropdown-item:last-child').textContent = 'Login';
-        document.querySelector('.dropdown-item:last-child').onclick = googleSignIn;
+        loginButton.textContent = 'Login';
+        loginButton.onclick = googleSignIn;
     }
 
     const searchInput = document.getElementById('search');
