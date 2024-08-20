@@ -234,15 +234,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openCanvas(link) {
-        const linkCanvas = new bootstrap.Offcanvas(document.getElementById('link_canvas'));
-        linkCanvas.dataset.linkId = link.link;
-        linkCanvas.dataset.linkDetails = JSON.stringify(link.details);
+        const linkCanvasElement = document.getElementById('link_canvas');
+        linkCanvasElement.dataset.linkId = link.link;
+        linkCanvasElement.dataset.linkDetails = JSON.stringify(link.details);
         const linkPrefix = link.details.source === 'reddit' ? 'u/' : '@';
         const urlPrefix = link.details.source === 'reddit' ? 'https://www.reddit.com/user/' : 'https://x.com/';
         const fullUrl = urlPrefix + link.link;
         document.getElementById('link_canvas_label').textContent = `Profile of ${link.name}`;
-
+        
         document.querySelector('.offcanvas-body').innerHTML = `
+            <!-- Your content here -->
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="row g-0">
@@ -339,6 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const saves = snapshot.val() || 0;
             savesElement.textContent = saves;
         });
+    
         const opensRef = database.ref(`links/${link.link}/opens`);
         opensRef.transaction(currentOpens => (currentOpens || 0) + 1);
     }
