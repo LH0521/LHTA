@@ -235,6 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openCanvas(link) {
         const linkCanvasElement = document.getElementById('link_canvas');
+        const linkCanvas = new bootstrap.Offcanvas(linkCanvasElement);
         linkCanvasElement.dataset.linkId = link.link;
         linkCanvasElement.dataset.linkDetails = JSON.stringify(link.details);
         const linkPrefix = link.details.source === 'reddit' ? 'u/' : '@';
@@ -243,7 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('link_canvas_label').textContent = `Profile of ${link.name}`;
         
         document.querySelector('.offcanvas-body').innerHTML = `
-            <!-- Your content here -->
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="row g-0">
@@ -334,13 +334,14 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         linkCanvas.show();
+
         const savesElement = document.getElementById('link-saves');
         const linkRef = database.ref(`links/${link.link}/saves`);
         linkRef.on('value', snapshot => {
             const saves = snapshot.val() || 0;
             savesElement.textContent = saves;
         });
-    
+
         const opensRef = database.ref(`links/${link.link}/opens`);
         opensRef.transaction(currentOpens => (currentOpens || 0) + 1);
     }
