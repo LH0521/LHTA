@@ -332,6 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
+        const linkCanvas = new bootstrap.Offcanvas(document.getElementById('link_canvas'));
         linkCanvas.show();
         const savesElement = document.getElementById('link-saves');
         const linkRef = database.ref(`links/${link.link}/saves`);
