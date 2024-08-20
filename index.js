@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    console.log("Firebase initialized successfully");
 
     function googleSignIn() {
         const provider = new firebase.auth.GoogleAuthProvider();
