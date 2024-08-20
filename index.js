@@ -80,11 +80,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (saves) {
                 Object.keys(saves).forEach(saveId => {
                     const save = saves[saveId];
-                    savesCanvasBody.innerHTML += `
-                        <div>
-                            ${save.name}
-                            <button class="btn btn-sm btn-danger" onclick="removeSavedLink('${user.uid}', '${saveId}', '${save.id}')">Remove</button>
-                        </div>`;
+                    const linkDiv = document.createElement('div');
+                    linkDiv.className = "list-group-item d-flex align-items-center px-0 py-3";
+                    linkDiv.innerHTML = `
+                        <div><a href="#" class="avatar avatar-sm rounded-circle"><img alt="..." src="${save.details.pfp}"></a></div>
+                        <div class="flex-fill ms-4"><a href="#" class="d-block h6 mb-1">${save.name}</a></div>
+                        <div><a href="#" class="btn btn-sm btn-neutral px-4 py-2 text-xs open-link-button">Open</a></div>
+                        <div><a href="#" class="btn btn-sm btn-danger px-4 py-2 text-xs remove-link-button">Remove</a></div>
+                    `;
+    
+                    savesCanvasBody.appendChild(linkDiv);
+                    linkDiv.querySelector('.open-link-button').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        openCanvas(save);
+                    });
+    
+                    linkDiv.querySelector('.remove-link-button').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        removeSavedLink(user.uid, saveId, save.id);
+                    });
                 });
             } else {
                 savesCanvasBody.innerHTML = '<p>No saved links yet.</p>';
