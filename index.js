@@ -80,11 +80,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (saves) {
                 Object.keys(saves).forEach(saveId => {
                     const save = saves[saveId];
-                    savesCanvasBody.innerHTML += `<div>${save.name}</div>`;
+                    savesCanvasBody.innerHTML += `
+                        <div>
+                            ${save.name}
+                            <button class="btn btn-sm btn-danger" onclick="removeSavedLink('${user.uid}', '${saveId}', '${save.id}')">Remove</button>
+                        </div>`;
                 });
             } else {
                 savesCanvasBody.innerHTML = '<p>No saved links yet.</p>';
             }
+        });
+    }
+
+    function removeSavedLink(userId, saveId, linkId) {
+        const userSaveRef = database.ref(`saves/${userId}/${saveId}`);
+        userSaveRef.remove().then(() => {
+            alert("Link removed from saves.");
+            updateLinkSavesCount(linkId, -1);
+        }).catch(error => {
+            console.error("Error removing link:", error);
         });
     }
 
@@ -96,27 +110,41 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const linkDetails = getCurrentLinkDetails();
-
         const userSavesRef = database.ref(`saves/${user.uid}`);
-        userSavesRef.push(linkDetails).then(() => {
-            alert("Link saved successfully!");
-            updateLinkSavesCount(linkDetails.id, +1);
-        }).catch(error => {
-            console.error("Error saving link:", error);
+
+        userSavesRef.orderByChild('id').equalTo(linkDetails.id).once('value', snapshot => {
+            if (snapshot.exists()) {
+                alert("This link is already saved.");
+            } else {
+                userSavesRef.push(linkDetails).then(() => {
+                    alert("Link saved successfully!");
+                    updateLinkSavesCount(linkDetails.id, +1);
+                }).catch(error => {
+                    console.error("Error saving link:", error);
+                });
+            }
         });
     });
 
     function getCurrentLinkDetails() {
+        const linkNameElement = document.getElementById('link_canvas_label').textContent;
+        const linkId = document.getElementById('link_canvas').dataset.linkId;
+        const linkDetails = document.getElementById('link_canvas').dataset.linkDetails;
+
         return {
-            id: "linkId",
-            name: "linkName",
-            details: "linkDetails"
+            id: linkId,
+            name: linkNameElement,
+            details: linkDetails
         };
     }
 
     function updateLinkSavesCount(linkId, delta) {
         const linkRef = database.ref(`links/${linkId}/saves`);
-        linkRef.transaction(currentSaves => (currentSaves || 0) + delta);
+        linkRef.transaction(currentSaves => {
+            const newSaves = (currentSaves || 0) + delta;
+            document.getElementById('link-saves').textContent = newSaves; // Update UI
+            return newSaves;
+        });
     }
 
     const searchInput = document.getElementById('search');
@@ -206,11 +234,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openCanvas(link) {
+        const linkCanvas = document.getElementById('link_canvas');
+        linkCanvas.dataset.linkId = link.link;
+        linkCanvas.dataset.linkDetails = JSON.stringify(link.details);
         const linkPrefix = link.details.source === 'reddit' ? 'u/' : '@';
         const urlPrefix = link.details.source === 'reddit' ? 'https://www.reddit.com/user/' : 'https://x.com/';
         const fullUrl = urlPrefix + link.link;
-
         document.getElementById('link_canvas_label').textContent = `Profile of ${link.name}`;
+
         document.querySelector('.offcanvas-body').innerHTML = `
             <div class="card mb-3">
                 <div class="card-body">
@@ -301,17 +332,14 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        const linkCanvas = new bootstrap.Offcanvas(document.getElementById('link_canvas'));
         linkCanvas.show();
-
         const savesElement = document.getElementById('link-saves');
-        const linkRef = database.ref(`links/${link.id}/saves`);
+        const linkRef = database.ref(`links/${link.link}/saves`);
         linkRef.on('value', snapshot => {
             const saves = snapshot.val() || 0;
             savesElement.textContent = saves;
         });
-
-        const opensRef = database.ref(`links/${link.id}/opens`);
+        const opensRef = database.ref(`links/${link.link}/opens`);
         opensRef.transaction(currentOpens => (currentOpens || 0) + 1);
     }
 
