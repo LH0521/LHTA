@@ -41,6 +41,7 @@
         <div class="offcanvas-footer my-4 ms-4 gap-4 bg-surface-secondary">
             <button type="button" class="btn btn-sm btn-neutral" data-bs-dismiss="offcanvas">Close</button>
             <button type="button" class="btn btn-sm btn-danger">Report</button>
+            <button type="button" class="btn btn-sm btn-primary" id="saveButton">Save Link</button>
         </div>
     </div>
 
@@ -51,94 +52,10 @@
             <button type="button" class="btn-close text-reset text-xs" data-bs-dismiss="offcanvas"
                 aria-label="Close"></button>
         </div>
-        <div class="offcanvas-body" class="row g-3 g-xl-5 mt-1">
-            <div class="card shadow-4-hover">
-                <div class="card-body pb-5">
-                    <div class="d-flex align-items-center">
-                        <div class="me-3">
-                            <img alt="Profile Picture" class="avatar rounded-1"
-                                src="https://pbs.twimg.com/profile_images/1562600762361921536/kMsRrEmD_400x400.jpg">
-                        </div>
-                        <div class="flex-1">
-                            <a href="#" class="d-block font-semibold text-sm text-heading text-primary-hover">Link
-                                Name</a>
-                            <div class="text-xs text-muted line-clamp-1">@link.link</div>
-                        </div>
-                        <div class="text-end">
-                            <button type="button" class="btn btn-sm btn-neutral rounded-pill view-button"
-                                data-index="${originalIndex}">
-                                <i class="bi bi-folder2-open me-1"></i>
-                                <span>View</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card shadow-4-hover">
-                <div class="card-body pb-5">
-                    <div class="d-flex align-items-center">
-                        <div class="me-3">
-                            <img alt="Profile Picture" class="avatar rounded-1"
-                                src="https://pbs.twimg.com/profile_images/1562600762361921536/kMsRrEmD_400x400.jpg">
-                        </div>
-                        <div class="flex-1">
-                            <a href="#" class="d-block font-semibold text-sm text-heading text-primary-hover">Link
-                                Name</a>
-                            <div class="text-xs text-muted line-clamp-1">@link.link</div>
-                        </div>
-                        <div class="text-end">
-                            <button type="button" class="btn btn-sm btn-neutral rounded-pill view-button"
-                                data-index="${originalIndex}">
-                                <i class="bi bi-folder2-open me-1"></i>
-                                <span>View</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="offcanvas-body" id="saves_canvas_body" class="row g-3 g-xl-5 mt-1">
+
         </div>
     </div>
-
-    <!--
-    <div class="container-fluid py-8 px bg-surface-secondary" id="welcome">
-        <div class="card max-w-screen-sm">
-            <div class="card-body">
-                <div class="d-flex justify-content-center">
-                    <a href="#" class="avatar avatar-xl">
-                        <img alt="..." src="logo.png">
-                    </a>
-                </div>
-                <div class="text-center my-6">
-                    <a href="#" class="d-block h5 mb-0">Link Hub</a>
-                    <span class="d-block text-sm text-muted">Welcome to Link Hub! This platform is designed exclusively
-                        for individuals aged 18 and older. If you do not meet this age requirement, we kindly ask that
-                        you exit. However, if you are 18 or older, please click the button below to continue.</span>
-                </div>
-                <div class="vstack gap-3 mt-4">
-                    <div class="form-item-checkable">
-                        <input class="form-item-check" type="radio" name="filter-version" id="filter-version-c">
-                        <label class="item w-full" for="filter-version-c" id="continue-button">
-                            <span
-                                class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
-                                <i class="bi bi-lightning-charge text-lg me-3"></i>
-                                <span class="text-body text-sm font-semibold">Continue</span>
-                            </span>
-                        </label>
-                    </div>
-                    <div class="form-item-checkable">
-                        <input class="form-item-check" type="radio" name="filter-version" id="filter-version-e">
-                        <label class="item w-full" for="filter-version-e">
-                            <span
-                                class="form-item-click d-flex align-items-center border border-primary-hover text-heading p-3 rounded-2">
-                                <i class="bi bi-lightning-charge text-lg me-3"></i>
-                                <span class="text-body text-sm font-semibold">Exit</span>
-                            </span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>-->
 
     <main class="py-6 bg-surface-secondary" id="application">
         <div class="container-fluid">
@@ -161,7 +78,8 @@
                                                 src="https://em-content.zobj.net/source/microsoft-teams/363/person_1f9d1.png"
                                                 class="avatar avatar-sm rounded-circle">
                                         </span>
-                                        <span class="flex-fill text-start text-sm font-semibold" id="username">Annonymous</span>
+                                        <span class="flex-fill text-start text-sm font-semibold"
+                                            id="usernameBar">Annonymous</span>
                                         <span>
                                             <i class="bi bi-chevron-expand text-white text-opacity-70"></i>
                                         </span>
@@ -169,14 +87,12 @@
                                     <div class="dropdown-menu dropdown-menu-end w-full">
                                         <div class="dropdown-header">
                                             <span class="d-block text-sm text-muted mb-1">Signed in as</span>
-                                            <span class="d-block text-heading font-semibold" id="username">Annonymous</span>
+                                            <span class="d-block text-heading font-semibold"
+                                                id="usernameDrop">Annonymous</span>
                                         </div>
                                         <div class="dropdown-divider"></div>
-                                        <span class="d-block text-sm text-muted">Preview Version of Link Hub. User/Auth
-                                            features are currently unavaliable!</span>
-                                        <div class="dropdown-divider"></div>
                                         <button class="dropdown-item" data-bs-toggle="offcanvas"
-                                            data-bs-target="#saves_canvas">
+                                            data-bs-target="#saves_canvas" style="display:none;">
                                             <i class="bi bi-heart me-3"></i>Saves
                                         </button>
                                         <div class="dropdown-divider"></div>

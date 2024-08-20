@@ -13,10 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
         appId: "1:263188180300:web:b5f27fb7ab12078c2cf3e9"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    console.log("Firebase initialized successfully");
-
+     // Initialize Firebase
+     firebase.initializeApp(firebaseConfig);
+     const auth = firebase.auth();
+     const database = firebase.database();
+ 
+     // Elements
+     const loginButton = document.getElementById('loginButton');
+     const saveButton = document.getElementById('saveButton');
+     const savesCanvasBody = document.getElementById('saves_canvas_body');
+    
     const loginButton = document.getElementById('loginButton');
     if (loginButton) {
         loginButton.addEventListener('click', googleSignIn);
@@ -41,21 +47,76 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateUIOnLogin(user) {
-        const userNameElement = document.getElementById('username');
+        const usernameBar = document.getElementById('usernameBar');
+        const usernameDrop = document.getElementById('usernameDrop');
         const userPicElement = document.querySelector('.avatar.avatar-sm');
-        userNameElement.textContent = user.displayName;
+        usernameBar.textContent = user.displayName;
+        usernameDrop.textContent = user.displayName;
         userPicElement.src = user.photoURL;
         loginButton.textContent = 'Logout';
         loginButton.onclick = signOut;
+        document.querySelector('.dropdown-item[data-bs-toggle="offcanvas"]').style.display = 'block';
+        loadSavedLinks(user);
     }
 
     function updateUIOnLogout() {
-        const userNameElement = document.querySelector('.dropdown-header span.d-block.text-heading');
+        const usernameBar = document.getElementById('usernameBar');
+        const usernameDrop = document.getElementById('usernameDrop');
         const userPicElement = document.querySelector('.avatar.avatar-sm');
-        userNameElement.textContent = 'Annonymous';
+        usernameBar.textContent = 'Annonymous';
+        usernameDrop.textContent = 'Annonymous';
         userPicElement.src = 'https://em-content.zobj.net/source/microsoft-teams/363/person_1f9d1.png';
         loginButton.textContent = 'Login';
         loginButton.onclick = googleSignIn;
+        document.querySelector('.dropdown-item[data-bs-toggle="offcanvas"]').style.display = 'none';
+        savesCanvasBody.innerHTML = '<p>Please log in to see your saves.</p>';
+    }
+
+    function loadSavedLinks(user) {
+        const userSavesRef = database.ref(`saves/${user.uid}`);
+        userSavesRef.on('value', snapshot => {
+            savesCanvasBody.innerHTML = '';
+            const saves = snapshot.val();
+            if (saves) {
+                Object.keys(saves).forEach(saveId => {
+                    const save = saves[saveId];
+                    savesCanvasBody.innerHTML += `<div>${save.name}</div>`;
+                });
+            } else {
+                savesCanvasBody.innerHTML = '<p>No saved links yet.</p>';
+            }
+        });
+    }
+
+    saveButton.addEventListener('click', () => {
+        const user = auth.currentUser;
+        if (!user) {
+            alert("You need to be logged in to save links.");
+            return;
+        }
+
+        const linkDetails = getCurrentLinkDetails();
+
+        const userSavesRef = database.ref(`saves/${user.uid}`);
+        userSavesRef.push(linkDetails).then(() => {
+            alert("Link saved successfully!");
+            updateLinkSavesCount(linkDetails.id, +1);
+        }).catch(error => {
+            console.error("Error saving link:", error);
+        });
+    });
+
+    function getCurrentLinkDetails() {
+        return {
+            id: "linkId",
+            name: "linkName",
+            details: "linkDetails"
+        };
+    }
+
+    function updateLinkSavesCount(linkId, delta) {
+        const linkRef = database.ref(`links/${linkId}/saves`);
+        linkRef.transaction(currentSaves => (currentSaves || 0) + delta);
     }
 
     const searchInput = document.getElementById('search');
@@ -242,6 +303,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const linkCanvas = new bootstrap.Offcanvas(document.getElementById('link_canvas'));
         linkCanvas.show();
+
+        const savesElement = document.getElementById('link-saves');
+        const linkRef = database.ref(`links/${link.id}/saves`);
+        linkRef.on('value', snapshot => {
+            const saves = snapshot.val() || 0;
+            savesElement.textContent = saves;
+        });
+
+        const opensRef = database.ref(`links/${link.id}/opens`);
+        opensRef.transaction(currentOpens => (currentOpens || 0) + 1);
     }
 
     const initialLinks = links.map((link, originalIndex) => ({
