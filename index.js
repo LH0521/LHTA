@@ -234,7 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openCanvas(link) {
-        const linkCanvas = document.getElementById('link_canvas');
         linkCanvas.dataset.linkId = link.link;
         linkCanvas.dataset.linkDetails = JSON.stringify(link.details);
         const linkPrefix = link.details.source === 'reddit' ? 'u/' : '@';
