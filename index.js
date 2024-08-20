@@ -101,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Error removing link:", error);
         });
     }
+    window.removeSavedLink = removeSavedLink;
 
     saveButton.addEventListener('click', () => {
         const user = auth.currentUser;
