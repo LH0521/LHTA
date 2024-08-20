@@ -234,6 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openCanvas(link) {
+        const linkCanvas = new bootstrap.Offcanvas(document.getElementById('link_canvas'));
         linkCanvas.dataset.linkId = link.link;
         linkCanvas.dataset.linkDetails = JSON.stringify(link.details);
         const linkPrefix = link.details.source === 'reddit' ? 'u/' : '@';
@@ -331,7 +332,6 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        const linkCanvas = new bootstrap.Offcanvas(document.getElementById('link_canvas'));
         linkCanvas.show();
         const savesElement = document.getElementById('link-saves');
         const linkRef = database.ref(`links/${link.link}/saves`);
