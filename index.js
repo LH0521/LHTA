@@ -13,17 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
         appId: "1:263188180300:web:b5f27fb7ab12078c2cf3e9"
     };
 
-     // Initialize Firebase
-     firebase.initializeApp(firebaseConfig);
-     const auth = firebase.auth();
-     const database = firebase.database();
- 
-     // Elements
-     const loginButton = document.getElementById('loginButton');
-     const saveButton = document.getElementById('saveButton');
-     const savesCanvasBody = document.getElementById('saves_canvas_body');
-    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const database = firebase.database();
+
+    // Elements
     const loginButton = document.getElementById('loginButton');
+    const saveButton = document.getElementById('saveButton');
+    const savesCanvasBody = document.getElementById('saves_canvas_body');
+
     if (loginButton) {
         loginButton.addEventListener('click', googleSignIn);
     }
