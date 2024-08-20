@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const firebaseConfig = {
         apiKey: "AIzaSyAAM6hjI1C6BTdOzVuehvAsgViHU_ZeKx0",
         authDomain: "lhta-dcc46.firebaseapp.com",
+        databaseURL: "https://lhta-dcc46-default-rtdb.firebaseio.com/",
         projectId: "lhta-dcc46",
         storageBucket: "lhta-dcc46.appspot.com",
         messagingSenderId: "263188180300",
