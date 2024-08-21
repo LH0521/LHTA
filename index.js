@@ -256,8 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const linkPrefix = link.details.source === 'reddit' ? 'u/' : '@';
         const urlPrefix = link.details.source === 'reddit' ? 'https://www.reddit.com/user/' : 'https://x.com/';
         const fullUrl = urlPrefix + link.link;
+    
         document.getElementById('link_canvas_label').textContent = `Profile of ${link.name}`;
-        
         document.querySelector('.offcanvas-body').innerHTML = `
             <div class="card mb-3">
                 <div class="card-body">
@@ -318,45 +318,22 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="card mb-3">
                 <div class="card-body">
                     <span class="d-block h6 text-heading mb-0">Kinks</span>
-                    <span class="d-block text-sm text-muted">${link.details.kinks.length > 0 ? link.details.kinks.join(', ') : 'N/A'}</span>
+                    <span class="d-block text-sm text-muted">${Array.isArray(link.details.kinks) && link.details.kinks.length > 0 ? link.details.kinks.join(', ') : 'N/A'}</span>
                     <hr class="my-3">
                     <span class="d-block h6 text-heading mb-0">Tags</span>
-                    <span class="d-block text-sm text-muted">${link.details.tags.join(', ')}</span>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div>
-                            <span class="d-block h6 text-heading mb-0">Give ${link.name} a rating</span>
-                            <span class="d-block text-sm text-muted">0 Votes | Your Vote <b>5</b></span>
-                        </div>
-                        <button class="btn btn-sm btn-neutral ms-auto">Information</button>
-                    </div>
-                    <hr class="my-3">
-                    <div class="rating mt-3">
-                        ${[5, 4, 3, 2, 1].map(i => `
-                            <input type="radio" id="star${i}" name="rate" value="${i}" />
-                            <label title="${['Excellent!', 'Great!', 'Good', 'Okay', 'Bad'][5 - i]}" for="star${i}">
-                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
-                                    <path d="M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z"></path>
-                                </svg>
-                            </label>
-                        `).join('')}
-                    </div>
+                    <span class="d-block text-sm text-muted">${link.details.tags ? link.details.tags.join(', ') : 'N/A'}</span>
                 </div>
             </div>
         `;
-
+    
         linkCanvas.show();
-
         const savesElement = document.getElementById('link-saves');
         const linkRef = database.ref(`links/${link.link}/saves`);
         linkRef.on('value', snapshot => {
             const saves = snapshot.val() || 0;
             savesElement.textContent = saves;
         });
-
+    
         const opensRef = database.ref(`links/${link.link}/opens`);
         opensRef.transaction(currentOpens => (currentOpens || 0) + 1);
     }
