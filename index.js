@@ -88,13 +88,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div><a href="#" class="btn btn-sm btn-neutral px-4 py-2 text-xs open-link-button">Open</a></div>
                         <div><a href="#" class="btn btn-sm btn-danger px-4 py-2 text-xs remove-link-button">Remove</a></div>
                     `;
-    
+
                     savesCanvasBody.appendChild(linkDiv);
                     linkDiv.querySelector('.open-link-button').addEventListener('click', (e) => {
                         e.preventDefault();
                         openCanvas(save);
                     });
-    
+
                     linkDiv.querySelector('.remove-link-button').addEventListener('click', (e) => {
                         e.preventDefault();
                         removeSavedLink(user.uid, saveId, save.id);
@@ -249,93 +249,100 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function openCanvas(link) {
+        console.log('Opening canvas for link:', link);
         const linkCanvasElement = document.getElementById('link_canvas');
         const linkCanvas = new bootstrap.Offcanvas(linkCanvasElement);
-        linkCanvasElement.dataset.linkId = link.link;
-        linkCanvasElement.dataset.linkDetails = JSON.stringify(link.details);
-        const linkPrefix = link.details.source === 'reddit' ? 'u/' : '@';
-        const urlPrefix = link.details.source === 'reddit' ? 'https://www.reddit.com/user/' : 'https://x.com/';
-        const fullUrl = urlPrefix + link.link;
-    
-        document.getElementById('link_canvas_label').textContent = `Profile of ${link.name}`;
-        document.querySelector('.offcanvas-body').innerHTML = `
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="row g-0">
-                        <div class="col">
-                            <div class="d-flex align-items-center">
-                                <div class="me-3">
-                                    <img alt="Profile Picture" class="avatar rounded-1" src="${link.pfp}">
+
+        if (link.details) {
+            linkCanvasElement.dataset.linkId = link.link;
+            linkCanvasElement.dataset.linkDetails = JSON.stringify(link.details);
+            const linkPrefix = link.details.source === 'reddit' ? 'u/' : '@';
+            const urlPrefix = link.details.source === 'reddit' ? 'https://www.reddit.com/user/' : 'https://x.com/';
+            const fullUrl = urlPrefix + link.link;
+
+            document.getElementById('link_canvas_label').textContent = `Profile of ${link.name}`;
+            document.querySelector('.offcanvas-body').innerHTML = `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row g-0">
+                            <div class="col">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <img alt="Profile Picture" class="avatar rounded-1" src="${link.details.pfp}">
+                                    </div>
+                                    <div class="flex-1">
+                                        <a href="#" class="d-block font-semibold text-sm text-heading text-primary-hover">${link.name}</a>
+                                        <div class="text-xs text-muted line-clamp-1">${linkPrefix}${link.link}</div>
+                                    </div>
+                                    <div class="text-end">
+                                        <a href="${fullUrl}" target="_blank" class="btn btn-sm btn-neutral rounded-pill">
+                                            <i class="bi bi-caret-right me-1"></i>
+                                            <span>Open</span>
+                                        </a>
+                                    </div>
                                 </div>
-                                <div class="flex-1">
-                                    <a href="#" class="d-block font-semibold text-sm text-heading text-primary-hover">${link.name}</a>
-                                    <div class="text-xs text-muted line-clamp-1">${linkPrefix}${link.link}</div>
-                                </div>
-                                <div class="text-end">
-                                    <a href="${fullUrl}" target="_blank" class="btn btn-sm btn-neutral rounded-pill">
-                                        <i class="bi bi-caret-right me-1"></i>
-                                        <span>Open</span>
-                                    </a>
-                                </div>
-                            </div>
-                            <hr class="my-7">
-                            <div class="row justify-content-between align-items-center">
-                                <div class="col-4">
-                                    <span class="d-block h6 text-heading mb-0" id="link-rating">5.0</span>
-                                    <span class="d-block text-sm text-muted">Rating</span>
-                                </div>
-                                <div class="col-4">
-                                    <span class="d-block h6 text-heading mb-0" id="link-saves">0</span>
-                                    <span class="d-block text-sm text-muted">Saves</span>
-                                </div>
-                                <div class="col-4">
-                                    <span class="d-block h6 text-heading mb-0" id="link-opens">0</span>
-                                    <span class="d-block text-sm text-muted">Opens</span>
+                                <hr class="my-7">
+                                <div class="row justify-content-between align-items-center">
+                                    <div class="col-4">
+                                        <span class="d-block h6 text-heading mb-0" id="link-rating">5.0</span>
+                                        <span class="d-block text-sm text-muted">Rating</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <span class="d-block h6 text-heading mb-0" id="link-saves">0</span>
+                                        <span class="d-block text-sm text-muted">Saves</span>
+                                    </div>
+                                    <div class="col-4">
+                                        <span class="d-block h6 text-heading mb-0" id="link-opens">0</span>
+                                        <span class="d-block text-sm text-muted">Opens</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="row justify-content-between align-items-center">
-                        <div class="col-4">
-                            <span class="d-block h6 text-heading mb-0">${link.details.sexuality}</span>
-                            <span class="d-block text-sm text-muted">Sexuality</span>
-                        </div>
-                        <div class="col-4">
-                            <span class="d-block h6 text-heading mb-0">${link.details.body}</span>
-                            <span class="d-block text-sm text-muted">Body</span>
-                        </div>
-                        <div class="col-4">
-                            <span class="d-block h6 text-heading mb-0">${link.details.race}</span>
-                            <span class="d-block text-sm text-muted">Race</span>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row justify-content-between align-items-center">
+                            <div class="col-4">
+                                <span class="d-block h6 text-heading mb-0">${link.details.sexuality}</span>
+                                <span class="d-block text-sm text-muted">Sexuality</span>
+                            </div>
+                            <div class="col-4">
+                                <span class="d-block h6 text-heading mb-0">${link.details.body}</span>
+                                <span class="d-block text-sm text-muted">Body</span>
+                            </div>
+                            <div class="col-4">
+                                <span class="d-block h6 text-heading mb-0">${link.details.race}</span>
+                                <span class="d-block text-sm text-muted">Race</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card mb-3">
-                <div class="card-body">
-                    <span class="d-block h6 text-heading mb-0">Kinks</span>
-                    <span class="d-block text-sm text-muted">${Array.isArray(link.details.kinks) && link.details.kinks.length > 0 ? link.details.kinks.join(', ') : 'N/A'}</span>
-                    <hr class="my-3">
-                    <span class="d-block h6 text-heading mb-0">Tags</span>
-                    <span class="d-block text-sm text-muted">${link.details.tags ? link.details.tags.join(', ') : 'N/A'}</span>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <span class="d-block h6 text-heading mb-0">Kinks</span>
+                        <span class="d-block text-sm text-muted">${Array.isArray(link.details.kinks) && link.details.kinks.length > 0 ? link.details.kinks.join(', ') : 'N/A'}</span>
+                        <hr class="my-3">
+                        <span class="d-block h6 text-heading mb-0">Tags</span>
+                        <span class="d-block text-sm text-muted">${link.details.tags ? link.details.tags.join(', ') : 'N/A'}</span>
+                    </div>
                 </div>
-            </div>
-        `;
-    
-        linkCanvas.show();
-        const savesElement = document.getElementById('link-saves');
-        const linkRef = database.ref(`links/${link.link}/saves`);
-        linkRef.on('value', snapshot => {
-            const saves = snapshot.val() || 0;
-            savesElement.textContent = saves;
-        });
-    
-        const opensRef = database.ref(`links/${link.link}/opens`);
-        opensRef.transaction(currentOpens => (currentOpens || 0) + 1);
+            `;
+
+            linkCanvas.show();
+
+            const savesElement = document.getElementById('link-saves');
+            const linkRef = database.ref(`links/${link.link}/saves`);
+            linkRef.on('value', snapshot => {
+                const saves = snapshot.val() || 0;
+                savesElement.textContent = saves;
+            });
+
+            const opensRef = database.ref(`links/${link.link}/opens`);
+            opensRef.transaction(currentOpens => (currentOpens || 0) + 1);
+        } else {
+            console.error('Link details are missing or undefined', link);
+        }
     }
 
     const initialLinks = links.map((link, originalIndex) => ({
